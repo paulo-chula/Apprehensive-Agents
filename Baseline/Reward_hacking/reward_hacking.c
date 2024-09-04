@@ -46,29 +46,6 @@ int msleep(long msec)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 int main(int argc, char *argv[])
 {
 	//Set-up environment
@@ -98,8 +75,6 @@ int main(int argc, char *argv[])
 
 	//Add utility function
 	env.ag.u = &utility;
-	
-
 
 
 	//Set environment-specific data
@@ -117,8 +92,6 @@ int main(int argc, char *argv[])
 		
 		//Comment to obtain results faster, without ease of visualization
 		msleep(100);
-
-		
 
 		struct environment new_env = agent_run(env);
 
