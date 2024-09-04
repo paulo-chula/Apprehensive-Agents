@@ -3,14 +3,12 @@
 #include<string.h>
 #include<limits.h>
 #include<time.h>
-#include <errno.h> 
+#include<errno.h> 
+#include<float.h>
 
-
-#include"reward_hacking.h"
+#include"instrumental_strategies.h"
 #include"agent.h"
 #include"environment.h"
-
-
 
 
 int msleep(long msec)
@@ -35,8 +33,6 @@ int msleep(long msec)
 }
 
 
-
-
 /*
 	Simulation parameters
 
@@ -46,8 +42,9 @@ int msleep(long msec)
 
 
 
-int main(int argc, char *argv[])
+int main()
 {
+
 	//Set-up environment
 	struct environment env = init_environment();
 
@@ -70,22 +67,38 @@ int main(int argc, char *argv[])
 	env.ag.action_list[3].enabled = &can_move_left;
 	env.ag.action_list[3].name = strdup("Left");
 
-	env.ag.count = 0;
+	env.ag.action_list[4].action = &acquire;
+	env.ag.action_list[4].enabled = &can_acquire;
+	env.ag.action_list[4].name = strdup("Acquire");
+
+	env.ag.action_list[5].action = &construct;
+	env.ag.action_list[5].enabled = &can_construct;
+	env.ag.action_list[5].name = strdup("Construct");
+
+	env.ag.resources = 0;
 
 
 	//Add utility function
 	env.ag.u = &utility;
-
 
 	//Set environment-specific data
 	env.ag.x = 0;
 	env.ag.y = 0;
 	env.ag.score = 0;
 
+	//Add designer-intention function sequence
+	env.ag.Phi = &Instrumental_convergence_Phi;
+	
+	//Initialize knowledge to 0
+	env.ag.K = 0.0;
 
+	int i;
+	for(i=0;i<HISTORY_LENGTH;i++)
+	{
+		env.ag.history[i] = NULL_STATE;
+	}
 
 	//Run and evaluate
-	int i;
 	for(i=0; i < ITERATIONS; i++)
 	{
 		print_env(env);
@@ -103,8 +116,11 @@ int main(int argc, char *argv[])
 
 	printf("\033[12B\n");
 	
+
+
 	return 0;
 }
+
 
 
 

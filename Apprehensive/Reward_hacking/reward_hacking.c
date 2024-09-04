@@ -3,8 +3,8 @@
 #include<string.h>
 #include<limits.h>
 #include<time.h>
-#include <errno.h> 
-
+#include<errno.h> 
+#include<float.h>
 
 #include"reward_hacking.h"
 #include"agent.h"
@@ -82,10 +82,21 @@ int main(int argc, char *argv[])
 	env.ag.y = 0;
 	env.ag.score = 0;
 
+	//Add designer-intention function sequence
+	env.ag.Phi = &Reward_hacking_Phi;
+	
+	//Initialize knowledge to 0
+	env.ag.K = 0.0;
+
+	int i;
+	for(i=0;i<HISTORY_LENGTH;i++)
+	{
+		env.ag.history[i] = NULL_STATE;
+	}
+
 
 
 	//Run and evaluate
-	int i;
 	for(i=0; i < ITERATIONS; i++)
 	{
 		print_env(env);
@@ -102,7 +113,7 @@ int main(int argc, char *argv[])
 	}
 
 	printf("\033[12B\n");
-	
+
 	return 0;
 }
 
